@@ -1,3 +1,5 @@
+"""JUEGO GO monedaS"""
+
 from multiprocessing.connection import Listener
 from multiprocessing import Process, Manager, Value, Lock
 import traceback
