@@ -82,10 +82,10 @@ class Game():
         n_duendes = len(self.duendes)
         for i  in range (n_duendes):
             self.set_pos_duende(i, gameinfo['pos_duendes'][i])
-        info_ban = gameinfo['pos_monedas']
+        info_monedas = gameinfo['pos_monedas']
         for i in range(10):
-            Ban_i = info_ban[i]
-            self.set_pos_moneda(i,Ban_i)
+            Moneda_i = info_monedas[i]
+            self.set_pos_moneda(i,Moneda_i)
         self.set_score(gameinfo['score'])
         self.running = gameinfo['is_running']
 
@@ -123,9 +123,9 @@ class duende_Draw(pygame.sprite.Sprite):
 
 class moneda_Draw(pygame.sprite.Sprite):
     
-    def __init__(self, ban):
+    def __init__(self, mon):
         super().__init__()
-        self.moneda = ban
+        self.moneda = mon
         self.image= pygame.image.load('moneda2.png')
         self.image = pygame.transform.scale(self.image,(50,50))
         self.image.set_colorkey(WHITE)
@@ -163,8 +163,11 @@ class Display():
         self.clock =  pygame.time.Clock()  #FPS
         self.background = pygame.image.load('city.jpg')
         self.background = pygame.transform.scale(self.background,(750,625))
+        pygame.mixer.init()
+        self.sound=pygame.mixer.music.load('tgfcoder-FrozenJam-SeamlessLoop.ogg')
+        self.sound=pygame.mixer.music.set_volume(0.4)
         pygame.init()
-     
+        pygame.mixer.music.play(loops=-1)
     def analyze_events(self):
         events = []        
         for event in pygame.event.get():
