@@ -1,7 +1,7 @@
 from multiprocessing.connection import Client
 import traceback
 import pygame
-import sys, os
+import sys
 import time
 
 TMAX = 40
