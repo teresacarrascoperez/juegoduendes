@@ -1,7 +1,7 @@
 from multiprocessing.connection import Client
 import traceback
 import pygame
-import sys
+import sys, os
 import time
 
 TMAX = 40
@@ -204,7 +204,8 @@ class Display():
         pygame.quit()
 
 def main(ip_address):
-    n_duendes = 3
+    print ('¿Cuántos jugadores desean comenzar la partida?')
+    n_duendes = int(input())
     try:
         with Client((ip_address, 6000), authkey=b'secret password') as conn:
             game = Game(n_duendes)
