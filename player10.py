@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May  2 10:53:05 2022
+
+@author: Maria
+"""
 from multiprocessing.connection import Client
 import traceback
 import pygame
@@ -17,7 +23,7 @@ SIZE = (750, 625)
 
 FPS = 60
 
-
+#Definimos la clase Duende, la clase Moneda y la clase Game de nuestro juego
 class Duende():
     
     def __init__(self, number):        
@@ -52,7 +58,7 @@ class Moneda():
         return f"B<{self.pos}>"
 
 class Game():
-    
+    #inicializamos las variables
     def __init__(self,n_duendes):
         self.duendes = [Duende(i) for i in range(n_duendes)]
         self.moneda =  [Moneda(i) for i in range(10)] 
@@ -80,7 +86,7 @@ class Game():
         self.time=time
     def set_score(self, score):
         self.score = score
-
+    #actualizamos el juego;la cantidad de monedas obtenidas, asi como la posicion de cada duende y moneda
     def update(self, gameinfo):
         n_duendes = len(self.duendes)
         for i  in range (n_duendes):
@@ -103,16 +109,16 @@ class Game():
       for j in range(n_duendes):
         	for i in range(10):
             		return f"G<{self.duendes[j]}:{self.moneda[i]}>"
-
+#Creamos las clases que dibujan en la pantalla los diferentes objetos
 class duende_Draw(pygame.sprite.Sprite):
     
     def __init__(self,mon):
         super().__init__()
         self.duende = mon
-        self.image = pygame.image.load('duende.png')
-        self.image = pygame.transform.scale(self.image,(90,90))
+        self.image = pygame.image.load('duende.png') #para cargar la imagen
+        self.image = pygame.transform.scale(self.image,(90,90)) #para ajustar la imagen a la pantalla
         self.image.set_colorkey(WHITE)
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect() #para obtener el area rectangular de la imagen
         self.update()
         
     def update(self):        
@@ -120,7 +126,7 @@ class duende_Draw(pygame.sprite.Sprite):
         self.rect.centerx, self.rect.centery = pos  
         
     def draw(self, screen):
-        screen.window.blit(self.image, self.rect)
+        screen.window.blit(self.image, self.rect) #para dibujar el duende sobre la pantalla
    
     def __str__(self):
         return f"S<{self.mon}>"
@@ -130,10 +136,10 @@ class moneda_Draw(pygame.sprite.Sprite):
     def __init__(self, mon):
         super().__init__()
         self.moneda = mon
-        self.image= pygame.image.load('moneda2.png')
-        self.image = pygame.transform.scale(self.image,(50,50))
+        self.image= pygame.image.load('moneda2.png') #para cargar la imagen
+        self.image = pygame.transform.scale(self.image,(50,50)) #para ajustar la imagen a la pantalla
         self.image.set_colorkey(WHITE)
-        self.rect = self.image.get_rect()
+        self.rect = self.image.get_rect() #para obtener el area rectangular de la imagen
         self.update()
 
     def update(self):
@@ -141,7 +147,7 @@ class moneda_Draw(pygame.sprite.Sprite):
         self.rect.centerx, self.rect.centery = pos
         
     def draw(self,screen):
-        screen.window.blit(self.image,(self.mon.pos))
+        screen.window.blit(self.image,(self.mon.pos)) #para dibujar la moneda sobre la pantalla
        
     def __str__(self):
         return f"P<{self.mon.pos}>"
@@ -155,7 +161,7 @@ class Display():
         self.time=game.get_time()
         self.duendesD = [duende_Draw(self.game.get_duende(i)) for i in range(n_duendes)]
         self.monedaD = [moneda_Draw(self.game.get_moneda(i)) for i in range(10)]
-        self.all_sprites = pygame.sprite.Group()
+        self.all_sprites = pygame.sprite.Group() #para administrar los multiples objetos sprite
         self.duende_group = pygame.sprite.Group()
         self.moneda_group = pygame.sprite.Group()
         for duende in self.duendesD:
@@ -173,17 +179,17 @@ class Display():
         self.reloj = pygame.transform.scale(self.reloj,(20,30))
         self.btitulo = pygame.image.load('fondotitulo.jpg')
         self.btitulo = pygame.transform.scale(self.btitulo,(250,32))
-        pygame.mixer.init()
-        self.sound=pygame.mixer.music.load('musica.ogg')
+        pygame.mixer.init() #para configurar la música del juego
+        self.sound=pygame.mixer.music.load('musica.ogg') 
         self.sound=pygame.mixer.music.set_volume(0.4)
         pygame.init()
         pygame.mixer.music.play(loops=-1)
-    
+#Definimos el funcionamiento del juego mediante la pulsación de las teclas left y right
     def analyze_events(self):
         events = []        
         for event in pygame.event.get():
             if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_ESCAPE:
+                if event.key == pygame.K_ESCAPE: #forma de salir del juego
                     events.append("quit")
                 elif event.key == pygame.K_LEFT:
                     events.append("left")
@@ -194,8 +200,8 @@ class Display():
         return events
 
     def refresh(self):
-        self.all_sprites.update()
-        self.screen.blit(self.background, (0, 0))
+        self.all_sprites.update() #para actualizar todos los objetos sprite del juego
+        self.screen.blit(self.background, (0, 0)) #Añadimos a la pantalla un reloj, un titulo..
         self.background.blit(self.reloj,(10,5))
         self.background.blit(self.btitulo,(SIZE[X]-500, 5))
         score = self.game.get_score()
@@ -210,7 +216,7 @@ class Display():
         	self.screen.blit(text2, (SIZE[X]-160, i*30+10))
         self.all_sprites.draw(self.screen)
         pygame.display.flip()
-    
+    #Funcion que añade el contador de tiempo a la pantalla del juego
     def tick(self):       
         fuente = pygame.font.SysFont("console", 18, True)
         aux1 = 0
