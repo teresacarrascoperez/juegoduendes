@@ -1,3 +1,9 @@
+# -*- coding: utf-8 -*-
+"""
+Created on Mon May  2 10:53:30 2022
+
+@author: Maria
+"""
 from multiprocessing.connection import Listener
 from multiprocessing import Process, Manager, Value, Lock
 import traceback
@@ -25,10 +31,11 @@ class Duende():
     def get_side(self):
         return self.index
     
+    #Definimos los movimientos de tal forma que no se salga de la pantalla del juego
     def moveLeft_M(self):
         self.pos[X] -= STEP
         if self.pos[X] < 0:
-            self.pos[X] = 0
+            self.pos[X] = 0 
      
     def moveRight_M(self):
         self.pos[X] += STEP
@@ -56,7 +63,8 @@ class Moneda():
     
     def get_pos(self):
         return self.pos         
-        
+    #cargamos las monedas de tal forma que una vez que desaparezcan de la pantalla(lleguen al suelo), vuelvan a aparecer para que continue el juego
+    
     def update(self):        
         
         self.pos[X] = self.pos[X] 
@@ -67,6 +75,7 @@ class Moneda():
         self.pos=[random. randint(0, SIZE[X]),0 ]
         self.vel_y = random.randint(3,5)
         self.velocity = [0, self.vel_y]
+    #definimos una distancia entre la moneda y el duende para "contabilizar" de alguna forma cuando se chocan 
     def chocamon(self,numero):
         dy=abs(self.pos[1]-numero.get_pos()[1])
         dx= abs(self.pos[0]-numero.get_pos()[0])
@@ -145,7 +154,7 @@ class Game():
         for i in range(10):
             mon = self.monedas[i]
             for j in range(n_duendes):
-            	if(mon.chocamon(self.duendes[j])):
+            	if(mon.chocamon(self.duendes[j])): #funcion que contabiliza la puntuacion de cada duende
             		mon.restart()
             		self.score[j]+=1
             		break
@@ -153,7 +162,7 @@ class Game():
             self.monedas[i]=mon
         self.lock.release()
         
-    def __str__(self):# FALTA
+    def __str__(self):
         return f"{self.get_info()}"
 
 
